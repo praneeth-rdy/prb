@@ -17,6 +17,14 @@ import requests
 
 # Create your views here.
 
+def register_tasks(request):
+    # contact_erp_task(repeat=15, repeat_until=None)
+    # execute_from_command_line('process_tasks')
+    return JsonResponse({
+        'success': True,
+        'message': 'Successfully registered all the tasks'
+    })
+
 def home(request):
     return JsonResponse({
         'success': True,
