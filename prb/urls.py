@@ -1,22 +1,22 @@
-"""
-URL configuration for prb project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+# Django Imports
+from django.urls import path, include
 from django.contrib import admin
-from django.urls import path
+from django.conf.urls.static import static
+from django.shortcuts import redirect
+
+# Standard Package Imports
+
+# Project Imports
+from . import settings
+
+# Third Party Imports
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls), # Namespace name is admin and path/url name is index for home page
+    path('', include('main.urls', namespace='main'), name='main'), # To use dynamic urls "{% url 'namespace:url_name' %}"
+    # path('', lambda x: redirect('/get_quote/')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
