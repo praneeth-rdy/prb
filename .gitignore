@@ -5,5 +5,4 @@
 *.log
 *.pot
 *.pyc
-*.sqlite3
 media

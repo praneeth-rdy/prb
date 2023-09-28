@@ -10,6 +10,7 @@ import os, json
 # Project Imports
 from .models import *
 from prb import settings
+from .tasks import contact_erp_task
 
 # Third Party Imports
 import requests
@@ -18,7 +19,7 @@ import requests
 # Create your views here.
 
 def register_tasks(request):
-    # contact_erp_task(repeat=15, repeat_until=None)
+    contact_erp_task(repeat=600, repeat_until=None)
     # execute_from_command_line('process_tasks')
     return JsonResponse({
         'success': True,
