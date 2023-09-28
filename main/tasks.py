@@ -1,7 +1,7 @@
 from background_task import background
 from django.core.mail import send_mail, EmailMessage
 
-import csv
+import csv, os
 
 from prb import settings
 
@@ -18,12 +18,12 @@ def contact_erp_task():
         set_last_fetched(notices_response['last_fetched'])
 
 def get_last_fetched():
-    with open('main/var.csv', 'r') as var_file:
+    with open(os.path.join(settings.BASE_DIR, 'main', 'var.csv'), 'r') as var_file:
         reader = csv.reader(var_file)
         first_row = next(reader)
     return int(first_row[1])
 
 def set_last_fetched(set_val):
-    with open('main/var.csv', 'w') as var_file:
+    with open(os.path.join(settings.BASE_DIR, 'main', 'var.csv'), 'w') as var_file:
         writer = csv.writer(var_file)
         writer.writerow(['last_fetched', set_val])
