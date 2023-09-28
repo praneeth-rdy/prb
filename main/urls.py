@@ -14,7 +14,6 @@ app_name = 'main'
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('erp', views.fetch_erp, name='erp'),
     path('register-tasks', views.register_tasks, name='tasks'),
     # path('get_quote/', views.get_quote, name='get_quote'),
     # path('<int:year>/', views.diary),

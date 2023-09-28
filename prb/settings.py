@@ -149,3 +149,6 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'praneeth.kolanu.iitkgp@gmail.com'
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_RECIPIENTS = ['k.praneeth1199@gmail.com']
+
+COOKIE = env('COOKIE')
