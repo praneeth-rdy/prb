@@ -16,9 +16,9 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     # print(sys.argv)
-    execute_from_command_line(sys.argv)
+    # execute_from_command_line(sys.argv)
     # sys.argv
-    # execute_from_command_line(['manage.py', 'process_tasks'])
+    execute_from_command_line(['manage.py', 'process_tasks'])
 
 
 if __name__ == '__main__':
