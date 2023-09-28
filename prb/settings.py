@@ -7,6 +7,13 @@ import os
 # Project Imports
 
 # Third Party Imports
+import environ
+
+
+
+# Initialise Env Variables
+env = environ.Env()
+environ.Env.read_env()
 
 
 
@@ -18,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4s4jsw%^x_ao6=r9%c+h4z9(x=-4)!&8s@4)dan_5ijs_7%rjc'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['praneethrdy.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'praneethrdy.pythonanywhere.com']
 
 
 # Application definition
@@ -141,4 +148,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'praneeth.kolanu.iitkgp@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')

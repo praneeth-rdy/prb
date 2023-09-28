@@ -6,4 +6,5 @@
 *.pot
 *.pyc
 *.sqlite3
+*.env
 media
