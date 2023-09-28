@@ -28,5 +28,5 @@ def register_tasks(request):
     })
 
 def home(request):
-    set_last_fetched(501)
+    print(get_last_fetched())
     return JsonResponse({})
