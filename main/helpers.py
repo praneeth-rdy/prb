@@ -2,7 +2,7 @@ from django.core.mail import send_mail, EmailMessage
 
 from prb import settings
 
-import requests, xmltodict
+import os, csv, requests, xmltodict
 
 def alert_users(notices, recipients):
     try:
@@ -41,45 +41,45 @@ def fetch_notices(last_fetched):
 
     # print(response.text)
 
-    try:
-        all_notices = xmltodict.parse(response.text)["rows"]["row"]
+    # try:
+    all_notices = xmltodict.parse(response.text)["rows"]["row"]
 
-        if last_fetched==None:
-            return {
-                "success": True,
-                "message": "Your request is successfull",
-                "data": [],
-                "last_fetched": all_notices[0]["cell"][0],
-            }
-
-        for notice in all_notices:
-            if int(notice["cell"][0]) > last_fetched:
-                # notice_attachment = fetch_notice_attachment(notice_id=int(notice["cell"][0]))
-                notice_body = fetch_notice_body(notice_id=int(notice["cell"][0]))
-                formatted_notice = {
-                    "type": notice["cell"][1],
-                    "subject": notice["cell"][2],
-                    "company": notice["cell"][3],
-                    "body": notice_body,
-                    "time": notice["cell"][6],
-                    # "download": notice_attachment,
-                }
-                new_notices.append(formatted_notice)
-            else:
-                break
-        
-        # print(new_notices)
+    if last_fetched==None:
         return {
             "success": True,
             "message": "Your request is successfull",
-            "data": new_notices,
+            "data": [],
             "last_fetched": all_notices[0]["cell"][0],
         }
-    except:
-        return {
-            "success": False,
-            "message": "Some unknown error"
-        }
+
+    for notice in all_notices:
+        if int(notice["cell"][0]) > last_fetched:
+            # notice_attachment = fetch_notice_attachment(notice_id=int(notice["cell"][0]))
+            notice_body = fetch_notice_body(notice_id=int(notice["cell"][0]))
+            formatted_notice = {
+                "type": notice["cell"][1],
+                "subject": notice["cell"][2],
+                "company": notice["cell"][3],
+                "body": notice_body,
+                "time": notice["cell"][6],
+                # "download": notice_attachment,
+            }
+            new_notices.append(formatted_notice)
+        else:
+            break
+    
+    # print(new_notices)
+    return {
+        "success": True,
+        "message": "Your request is successfull",
+        "data": new_notices,
+        "last_fetched": all_notices[0]["cell"][0],
+    }
+    # except:
+    #     return {
+    #         "success": False,
+    #         "message": "Some unknown error"
+    #     }
     # return {}
 
 
@@ -116,3 +116,30 @@ def fetch_notice_body(notice_id):
     else:
         return None
 
+def contact_erp():
+    last_fetched = get_last_fetched()
+    notices_response = fetch_notices(last_fetched=last_fetched)
+    if not notices_response['success']:
+        return {
+            'success': False,
+            'message': notices_response['message']
+        }
+    print("Notices fetched", notices_response)
+    alert_users(notices=notices_response["data"], recipients=settings.EMAIL_RECIPIENTS)
+    if notices_response['success']:
+        set_last_fetched(notices_response['last_fetched'])
+    return {
+        'success': True,
+        'message': 'Contact successful'
+    }
+
+def get_last_fetched():
+    with open(os.path.join(settings.BASE_DIR, 'main', 'var.csv'), 'r') as var_file:
+        reader = csv.reader(var_file)
+        first_row = next(reader)
+    return int(first_row[1])
+
+def set_last_fetched(set_val):
+    with open(os.path.join(settings.BASE_DIR, 'main', 'var.csv'), 'w') as var_file:
+        writer = csv.writer(var_file)
+        writer.writerow(['last_fetched', set_val])

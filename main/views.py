@@ -10,8 +10,8 @@ import os, json
 # Project Imports
 from .models import *
 from prb import settings
-from .tasks import contact_erp_task, get_last_fetched, set_last_fetched
-from .helpers import alert_users, fetch_notices
+from .tasks import contact_erp_task
+from .helpers import alert_users, fetch_notices, contact_erp, get_last_fetched, set_last_fetched
 
 # Third Party Imports
 import requests
@@ -29,4 +29,9 @@ def register_tasks(request):
 
 def home(request):
     print(get_last_fetched())
+    return JsonResponse({})
+
+def send_notices(request):
+    response = contact_erp()
+    print(response)
     return JsonResponse({})
