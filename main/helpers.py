@@ -65,6 +65,7 @@ def fetch_notices(last_fetched):
                 # "download": notice_attachment,
             }
             new_notices.append(formatted_notice)
+            # print(notice)
         else:
             break
     
@@ -89,7 +90,7 @@ def fetch_notice_attachment(notice_id):
 
     payload={}
     headers = {
-    'Cookie': 'JSESSIONID=9310CE01109F81E80E5C83921A4F12BE.worker2; ssoToken=F211415D3F2E8457F75E079849D67FA0.worker17C58F5782CFFEE7664C4CA3C848842B8.worker3MRCLSWXS2L40ENC466VWFTKP9VBBGLSA28OUSVSH7Y8YO95R7C4GHH4NDIE1B5O7; JSID#/IIT_ERP3=7C58F5782CFFEE7664C4CA3C848842B8.worker3; JSID#/Academic=1D6126DB18B65708103272A324716C61.worker3; JSID#/TrainingPlacementSSO=9310CE01109F81E80E5C83921A4F12BE.worker2; JSESSIONID=B450616AC4928D7FC28C489A38538BE2.worker2'
+    'Cookie': settings.COOKIE
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
@@ -106,7 +107,7 @@ def fetch_notice_body(notice_id):
 
     payload={}
     headers = {
-    'Cookie': 'JSESSIONID=9310CE01109F81E80E5C83921A4F12BE.worker2; ssoToken=F211415D3F2E8457F75E079849D67FA0.worker17C58F5782CFFEE7664C4CA3C848842B8.worker3MRCLSWXS2L40ENC466VWFTKP9VBBGLSA28OUSVSH7Y8YO95R7C4GHH4NDIE1B5O7; JSID#/IIT_ERP3=7C58F5782CFFEE7664C4CA3C848842B8.worker3; JSID#/Academic=1D6126DB18B65708103272A324716C61.worker3; JSID#/TrainingPlacementSSO=9310CE01109F81E80E5C83921A4F12BE.worker2; JSESSIONID=B450616AC4928D7FC28C489A38538BE2.worker2'
+    'Cookie': settings.COOKIE
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
@@ -124,7 +125,7 @@ def contact_erp():
             'success': False,
             'message': notices_response['message']
         }
-    print("Notices fetched", notices_response)
+    # print("Notices fetched", notices_response)
     alert_users(notices=notices_response["data"], recipients=settings.EMAIL_RECIPIENTS)
     if notices_response['success']:
         set_last_fetched(notices_response['last_fetched'])
