@@ -2,7 +2,7 @@ from django.core.mail import send_mail, EmailMessage
 
 from prb import settings
 
-import os, csv, requests, xmltodict
+import os, csv, re, requests, xmltodict
 
 def alert_users(notices, recipients):
     if settings.DEBUG:
@@ -115,7 +115,10 @@ def fetch_notice_body(notice_id):
     response = requests.request("GET", url, headers=headers, data=payload)
 
     if response.text:
-        return response.text
+        pattern = r"<div[\s\S]*?</div>"
+        match = re.search(pattern, response.text)
+        print(match.group())
+        return match.group()
     else:
         return None
 
