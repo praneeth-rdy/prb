@@ -29,7 +29,7 @@ def alert_users(notices, recipients):
 def fetch_notices(last_fetched):
     new_notices = []
 
-    url = "https://erp.iitkgp.ac.in/TrainingPlacementSSO/ERPMonitoring.htm?action=fetchData&jqqueryid=54&_search=false&nd=1694657966755&rows=20&page=1&sidx=&sort=desc&totalrows=50"
+    url = "https://erp.iitkgp.ac.in/TrainingPlacementSSO/ERPMonitoring.htm?action=fetchData&jqqueryid=54&_search=false&nd=1695958592456&rows=20&page=1&sidx=&sort=desc&totalrows=50"
     payload={}
     headers = {
     'Cookie': settings.COOKIE
