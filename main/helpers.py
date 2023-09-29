@@ -1,4 +1,4 @@
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import send_mail, EmailMessage, EmailMultiAlternatives
 
 from prb import settings
 
@@ -15,15 +15,25 @@ def alert_users(notices, recipients):
                 'from': settings.EMAIL_HOST_USER,
                 'fail_silently': False,
             }
-            email_response = send_mail(
+            # email_response = send_mail(
+            #     subject=email_options['subject'],
+            #     message=email_options['html_message'],
+            #     html_message=email_options['html_message'],
+            #     from_email=email_options['from'],
+            #     recipient_list=recipients,
+            #     fail_silently=False,
+            # )
+            email = EmailMultiAlternatives(
                 subject=email_options['subject'],
-                message=email_options['html_message'],
-                html_message=email_options['html_message'],
+                body=email_options['html_message'],
                 from_email=email_options['from'],
-                recipient_list=recipients,
-                fail_silently=False,
+                to=recipients,
             )
-            print(email_response)
+            email.attach_alternative(email_options['html_message'], "text/html")
+            if(notice['attachment']):
+                email.attach("erp-attachment.pdf", notice['attachment'], "application/pdf")
+            email_response = email.send(fail_silently=False)
+            # print(email_response)
     except:
         print("Error while sending emails")
 
@@ -56,7 +66,7 @@ def fetch_notices(last_fetched):
 
         for notice in all_notices:
             if int(notice["cell"][0]) > last_fetched:
-                # notice_attachment = fetch_notice_attachment(notice_id=int(notice["cell"][0]))
+                notice_attachment = fetch_notice_attachment(notice_id=int(notice["cell"][0]))
                 notice_body = fetch_notice_body(notice_id=int(notice["cell"][0]))
                 formatted_notice = {
                     "type": notice["cell"][1],
@@ -64,10 +74,10 @@ def fetch_notices(last_fetched):
                     "company": notice["cell"][3],
                     "body": notice_body,
                     "time": notice["cell"][6],
-                    # "download": notice_attachment,
+                    "attachment": notice_attachment,
                 }
                 new_notices.append(formatted_notice)
-                # print(notice)
+                # print(notice_attachment)
             else:
                 break
         
@@ -96,9 +106,10 @@ def fetch_notice_attachment(notice_id):
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
+    # print(response.content)
 
-    if response.text:
-        return response
+    if response.content:
+        return response.content
     else:
         return None
     
@@ -117,7 +128,7 @@ def fetch_notice_body(notice_id):
     if response.text:
         pattern = r"<div[\s\S]*?</div>"
         match = re.search(pattern, response.text)
-        print(match.group())
+        # print(match.group())
         return match.group()
     else:
         return None
