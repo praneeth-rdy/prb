@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (env('DEBUG')=='True')
 
 ALLOWED_HOSTS = ['127.0.0.1', 'praneethrdy.pythonanywhere.com', '13.233.158.42']
 
@@ -149,6 +149,6 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'praneeth.kolanu.iitkgp@gmail.com'
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_RECIPIENTS = ['k.praneeth1199@gmail.com']
+EMAIL_RECIPIENTS = ['cdc-noticeboard@googlegroups.com']
 
 COOKIE = env('COOKIE')

@@ -5,6 +5,8 @@ from prb import settings
 import os, csv, requests, xmltodict
 
 def alert_users(notices, recipients):
+    if settings.DEBUG:
+        recipients = ['k.praneeth1199@gmail.com']
     try:
         for notice in notices:
             email_options = {
