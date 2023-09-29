@@ -41,46 +41,46 @@ def fetch_notices(last_fetched):
 
     # print(response.text)
 
-    # try:
-    all_notices = xmltodict.parse(response.text)["rows"]["row"]
+    try:
+        all_notices = xmltodict.parse(response.text)["rows"]["row"]
 
-    if last_fetched==None:
+        if last_fetched==None:
+            return {
+                "success": True,
+                "message": "Your request is successfull",
+                "data": [],
+                "last_fetched": all_notices[0]["cell"][0],
+            }
+
+        for notice in all_notices:
+            if int(notice["cell"][0]) > last_fetched:
+                # notice_attachment = fetch_notice_attachment(notice_id=int(notice["cell"][0]))
+                notice_body = fetch_notice_body(notice_id=int(notice["cell"][0]))
+                formatted_notice = {
+                    "type": notice["cell"][1],
+                    "subject": notice["cell"][2],
+                    "company": notice["cell"][3],
+                    "body": notice_body,
+                    "time": notice["cell"][6],
+                    # "download": notice_attachment,
+                }
+                new_notices.append(formatted_notice)
+                # print(notice)
+            else:
+                break
+        
+        # print(new_notices)
         return {
             "success": True,
             "message": "Your request is successfull",
-            "data": [],
+            "data": new_notices,
             "last_fetched": all_notices[0]["cell"][0],
         }
-
-    for notice in all_notices:
-        if int(notice["cell"][0]) > last_fetched:
-            # notice_attachment = fetch_notice_attachment(notice_id=int(notice["cell"][0]))
-            notice_body = fetch_notice_body(notice_id=int(notice["cell"][0]))
-            formatted_notice = {
-                "type": notice["cell"][1],
-                "subject": notice["cell"][2],
-                "company": notice["cell"][3],
-                "body": notice_body,
-                "time": notice["cell"][6],
-                # "download": notice_attachment,
-            }
-            new_notices.append(formatted_notice)
-            # print(notice)
-        else:
-            break
-    
-    # print(new_notices)
-    return {
-        "success": True,
-        "message": "Your request is successfull",
-        "data": new_notices,
-        "last_fetched": all_notices[0]["cell"][0],
-    }
-    # except:
-    #     return {
-    #         "success": False,
-    #         "message": "Some unknown error"
-    #     }
+    except:
+        return {
+            "success": False,
+            "message": "Some unknown error"
+        }
     # return {}
 
 
