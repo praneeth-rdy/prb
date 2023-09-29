@@ -34,7 +34,7 @@ def fetch_notices(last_fetched):
     headers = {
     'Cookie': settings.COOKIE
     }
-    response = requests.request("GET", url, headers=headers, data=payload)
+    response = requests.get(url, headers=headers, data=payload)
 
 
     # print(response)
