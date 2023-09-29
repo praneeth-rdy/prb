@@ -34,4 +34,4 @@ def home(request):
 def send_notices(request):
     response = contact_erp()
     print(response)
-    return JsonResponse({})
+    return JsonResponse(response)
