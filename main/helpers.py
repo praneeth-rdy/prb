@@ -65,7 +65,10 @@ def fetch_notices(last_fetched):
 
     for notice in all_notices:
         notice_type = notice["cell"][1];
-        if int(notice["cell"][0]) > last_fetched and notice_type.lower() == "placement":
+        print(int(notice["cell"][0]) > last_fetched and notice_type.lower() == "placement")
+        if int(notice["cell"][0]) <= last_fetched:
+            break
+        if notice_type.lower() == "placement":
             notice_attachment = fetch_notice_attachment(notice_id=int(notice["cell"][0]))
             notice_body = fetch_notice_body(notice_id=int(notice["cell"][0]))
             formatted_notice = {
@@ -78,8 +81,6 @@ def fetch_notices(last_fetched):
             }
             new_notices.append(formatted_notice)
             # print(notice_attachment)
-        else:
-            break
     
     # print(new_notices)
     return {
